@@ -3,61 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>院校专业报名系统</title>
+    <title>专业报名系统</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            /* font-family: 'Microsoft YaHei', Arial, sans-serif; */
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
         }
         body {
             background-color: #f5f7fa;
             color: #333;
             line-height: 1.6;
+            padding: 20px;
         }
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 30px;
         }
         header {
             text-align: center;
             margin-bottom: 30px;
-            padding: 50px 0;
-	    background-image: url("img/img.jpg");
-            background-size: 100%;
-	    /* background-color: #2c3e50; */
-            color: #333;
-            border-radius: 8px;
-	    height: 150px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
         }
         h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+        .search-box {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .search-box input {
+            padding: 10px 15px;
+            width: 60%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .search-box button {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .departments {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
         }
         .department-card {
             background-color: white;
-            border-radius: 10px;
+            border-radius: 8px;
             padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            border: 1px solid #eee;
         }
         .department-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
-        .department-title {
+        .department-card h2 {
             color: #2c3e50;
-            font-size: 20px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .department-title span {
-            font-size: 14px;
-            color: #7f8c8d;
+            margin-bottom: 10px;
         }
         .back-btn {
             background-color: #95a5a6;
@@ -68,7 +88,7 @@
             cursor: pointer;
             margin-bottom: 20px;
         }
-        .major-list {
+        .majors-list {
             display: none;
         }
         .major-item {
@@ -86,6 +106,7 @@
         .major-name {
             font-weight: bold;
             color: #2c3e50;
+            font-size: 18px;
         }
         .stats {
             display: flex;
@@ -112,94 +133,81 @@
             height: 100%;
             border-radius: 5px;
             background-color: #3498db;
-            width: 0%;
+            width: 77.78%; /* 35/45 ≈ 77.78% */
             transition: width 0.5s ease;
         }
-        .danger {
-            background-color: #e74c3c;
-        }
-        .register-btn {
-            background-color: #2ecc71;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
             width: 100%;
-            font-size: 14px;
-            transition: background-color 0.3s;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
         }
-        .register-btn:hover {
-            background-color: #27ae60;
-        }
-        .register-btn:disabled {
-            background-color: #bdc3c7;
-            cursor: not-allowed;
-        }
-        .view-btn {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            padding: 8px 15px;
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px;
             border-radius: 5px;
+            text-align: center;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
             cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
+        }
+        .close:hover {
+            color: black;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1 style="font-size: 30px;">工商学院专业名额</h1>
-	    <h1 style="font-size: 30px;">统计系统</h1>
-            <p style="color: crimson; font-size: 20px;">仅限内部查看</p>
+            <h1>工商学院专业报名统计系统</h1>
+            <p style="color: crimson;">仅供内部使用查看</p>
         </header>
 
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="输入专业名称查询报名情况">
+            <button onclick="searchMajor()">查询</button>
+        </div>
+
         <div id="department-view">
-            <div class="department-card" onclick="showMajors('art')">
-                <div class="department-title">
-                    艺术创作系
-                    <span>点击查看专业</span>
+            <div class="departments">
+                <div class="department-card" onclick="showMajors('art')">
+                    <h2>艺术创作系</h2>
+                    <p>点击查看专业</p>
+                </div>
+                <div class="department-card" onclick="showMajors('business')">
+                    <h2>工商管理系</h2>
+                    <p>点击查看专业</p>
+                </div>
+                <div class="department-card" onclick="showMajors('information')">
+                    <h2>信息工程系</h2>
+                    <p>点击查看专业</p>
+                </div>
+                <div class="department-card" onclick="showMajors('economy')">
+                    <h2>经贸系</h2>
+                    <p>点击查看专业</p>
+                </div>
+                <div class="department-card" onclick="showMajors('science')">
+                    <h2>理工系</h2>
+                    <p>点击查看专业</p>
                 </div>
             </div>
-
-            <div class="department-card" onclick="showMajors('business')">
-                <div class="department-title">
-                    工商管理系
-                    <span>点击查看专业</span>
-                </div>
-            </div>
-
-            <div class="department-card" onclick="showMajors('information')">
-                <div class="department-title">
-                    信息工程系
-                    <span>点击查看专业</span>
-                </div>
-            </div>
-
-            <div class="department-card" onclick="showMajors('economy')">
-                <div class="department-title">
-                    经贸系
-                    <span>点击查看专业</span>
-                </div>
-            </div>
-
-            <div class="department-card" onclick="showMajors('science')">
-                <div class="department-title">
-                    理工系
-                    <span>点击查看专业</span>
-                </div>
-            </div>
-			
-			<button onclick="resetAllData()" style="margin: 20px auto; display: block; margin-top: 500px;">重置所有数据</button>
-			
         </div>
 
         <!-- 艺术创作系专业列表 -->
-        <div id="art-majors" class="major-list">
+        <div id="art-majors" class="majors-list">
             <button class="back-btn" onclick="backToDepartments()">← 返回院系列表</button>
-            <h2 class="department-title">艺术创作系</h2>
+            <h2 style="text-align: center; margin-bottom: 20px;">艺术创作系</h2>
             
             <div class="major-item">
                 <div class="major-header">
@@ -207,22 +215,21 @@
                 </div>
                 <div class="stats">
                     <div class="stat-item">
-                        <div class="stat-value" id="art-1-total">45</div>
+                        <div class="stat-value">45</div>
                         <div>总名额</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="art-1-registered">0</div>
+                        <div class="stat-value" id="art-1-registered">35</div>
                         <div>已报名</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="art-1-remaining">45</div>
+                        <div class="stat-value" id="art-1-remaining">10</div>
                         <div>剩余名额</div>
                     </div>
                 </div>
                 <div class="progress-container">
                     <div class="progress-bar" id="art-1-progress"></div>
                 </div>
-                <button class="register-btn" id="art-1-btn" onclick="register('art', 1)">立即报名</button>
             </div>
             
             <div class="major-item">
@@ -231,95 +238,91 @@
                 </div>
                 <div class="stats">
                     <div class="stat-item">
-                        <div class="stat-value" id="art-2-total">45</div>
+                        <div class="stat-value">45</div>
                         <div>总名额</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="art-2-registered">0</div>
+                        <div class="stat-value" id="art-2-registered">35</div>
                         <div>已报名</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="art-2-remaining">45</div>
+                        <div class="stat-value" id="art-2-remaining">10</div>
                         <div>剩余名额</div>
                     </div>
                 </div>
                 <div class="progress-container">
                     <div class="progress-bar" id="art-2-progress"></div>
                 </div>
-                <button class="register-btn" id="art-2-btn" onclick="register('art', 2)">立即报名</button>
             </div>
-            
-            <div class="major-item">
-                <div class="major-header">
-                    <div class="major-name">计算机动画制作</div>
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value" id="art-3-total">45</div>
-                        <div>总名额</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="art-3-registered">0</div>
-                        <div>已报名</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="art-3-remaining">45</div>
-                        <div>剩余名额</div>
-                    </div>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="art-3-progress"></div>
-                </div>
-                <button class="register-btn" id="art-3-btn" onclick="register('art', 3)">立即报名</button>
-            </div>
-            
-            <div class="major-item">
-                <div class="major-header">
-                    <div class="major-name">计算机动画制作(短视频制作技术方向)</div>
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value" id="art-4-total">45</div>
-                        <div>总名额</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="art-4-registered">0</div>
-                        <div>已报名</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="art-4-remaining">45</div>
-                        <div>剩余名额</div>
-                    </div>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="art-4-progress"></div>
-                </div>
-                <button class="register-btn" id="art-4-btn" onclick="register('art', 4)">立即报名</button>
-            </div>
-            
-            <div class="major-item">
-                <div class="major-header">
-                    <div class="major-name">室内设计</div>
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value" id="art-5-total">45</div>
-                        <div>总名额</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="art-5-registered">0</div>
-                        <div>已报名</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="art-5-remaining">45</div>
-                        <div>剩余名额</div>
-                    </div>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="art-5-progress"></div>
-                </div>
-                <button class="register-btn" id="art-5-btn" onclick="register('art', 5)">立即报名</button>
-            </div>
+			
+			<div class="major-item">
+			    <div class="major-header">
+			        <div class="major-name">计算机动画制作</div>
+			    </div>
+			    <div class="stats">
+			        <div class="stat-item">
+			            <div class="stat-value">45</div>
+			            <div>总名额</div>
+			        </div>
+			        <div class="stat-item">
+			            <div class="stat-value" id="art-3-registered">35</div>
+			            <div>已报名</div>
+			        </div>
+			        <div class="stat-item">
+			            <div class="stat-value" id="art-3-remaining">10</div>
+			            <div>剩余名额</div>
+			        </div>
+			    </div>
+			    <div class="progress-container">
+			        <div class="progress-bar" id="art-3-progress"></div>
+			    </div>
+			</div>
+			
+			<div class="major-item">
+			    <div class="major-header">
+			        <div class="major-name">计算机动画制作(短视频制作技术方向)</div>
+			    </div>
+			    <div class="stats">
+			        <div class="stat-item">
+			            <div class="stat-value">45</div>
+			            <div>总名额</div>
+			        </div>
+			        <div class="stat-item">
+			            <div class="stat-value" id="art-4-registered">35</div>
+			            <div>已报名</div>
+			        </div>
+			        <div class="stat-item">
+			            <div class="stat-value" id="art-4-remaining">10</div>
+			            <div>剩余名额</div>
+			        </div>
+			    </div>
+			    <div class="progress-container">
+			        <div class="progress-bar" id="art-4-progress"></div>
+			    </div>
+			</div>
+			
+			<div class="major-item">
+			    <div class="major-header">
+			        <div class="major-name">室内设计</div>
+			    </div>
+			    <div class="stats">
+			        <div class="stat-item">
+			            <div class="stat-value">45</div>
+			            <div>总名额</div>
+			        </div>
+			        <div class="stat-item">
+			            <div class="stat-value" id="art-5-registered">35</div>
+			            <div>已报名</div>
+			        </div>
+			        <div class="stat-item">
+			            <div class="stat-value" id="art-5-remaining">10</div>
+			            <div>剩余名额</div>
+			        </div>
+			    </div>
+			    <div class="progress-container">
+			        <div class="progress-bar" id="art-5-progress"></div>
+			    </div>
+			</div>
 			
 			<div class="major-item">
 			    <div class="major-header">
@@ -327,22 +330,21 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="art-6-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="art-6-registered">0</div>
+			            <div class="stat-value" id="art-6-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="art-6-remaining">45</div>
+			            <div class="stat-value" id="art-6-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="art-6-progress"></div>
 			    </div>
-			    <button class="register-btn" id="art-6-btn" onclick="register('art', 6)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
@@ -351,22 +353,21 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="art-7-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="art-7-registered">0</div>
+			            <div class="stat-value" id="art-7-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="art-7-remaining">45</div>
+			            <div class="stat-value" id="art-7-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="art-7-progress"></div>
 			    </div>
-			    <button class="register-btn" id="art-7-btn" onclick="register('art', 7)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
@@ -375,22 +376,21 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="art-8-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="art-8-registered">0</div>
+			            <div class="stat-value" id="art-8-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="art-8-remaining">45</div>
+			            <div class="stat-value" id="art-8-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="art-8-progress"></div>
 			    </div>
-			    <button class="register-btn" id="art-8-btn" onclick="register('art', 8)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
@@ -399,22 +399,21 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="art-9-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="art-9-registered">0</div>
+			            <div class="stat-value" id="art-9-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="art-9-remaining">45</div>
+			            <div class="stat-value" id="art-9-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="art-9-progress"></div>
 			    </div>
-			    <button class="register-btn" id="art-9-btn" onclick="register('art', 9)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
@@ -423,22 +422,21 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="art-10-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="art-10-registered">0</div>
+			            <div class="stat-value" id="art-10-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="art-10-remaining">45</div>
+			            <div class="stat-value" id="art-10-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="art-10-progress"></div>
 			    </div>
-			    <button class="register-btn" id="art-10-btn" onclick="register('art', 10)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
@@ -447,30 +445,29 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="art-11-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="art-11-registered">0</div>
+			            <div class="stat-value" id="art-11-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="art-11-remaining">45</div>
+			            <div class="stat-value" id="art-11-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="art-11-progress"></div>
 			    </div>
-			    <button class="register-btn" id="art-11-btn" onclick="register('art', 11)">立即报名</button>
 			</div>
 			
         </div>
 
         <!-- 工商管理系专业列表 -->
-        <div id="business-majors" class="major-list">
+        <div id="business-majors" class="majors-list">
             <button class="back-btn" onclick="backToDepartments()">← 返回院系列表</button>
-            <h2 class="department-title">工商管理系</h2>
+            <h2 style="text-align: center; margin-bottom: 20px;">工商管理系</h2>
             
             <div class="major-item">
                 <div class="major-header">
@@ -478,46 +475,44 @@
                 </div>
                 <div class="stats">
                     <div class="stat-item">
-                        <div class="stat-value" id="business-1-total">45</div>
+                        <div class="stat-value">45</div>
                         <div>总名额</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="business-1-registered">0</div>
+                        <div class="stat-value" id="business-1-registered">35</div>
                         <div>已报名</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="business-1-remaining">45</div>
+                        <div class="stat-value" id="business-1-remaining">10</div>
                         <div>剩余名额</div>
                     </div>
                 </div>
                 <div class="progress-container">
                     <div class="progress-bar" id="business-1-progress"></div>
                 </div>
-                <button class="register-btn" id="business-1-btn" onclick="register('business', 1)">立即报名</button>
             </div>
-            
+			
 			<div class="major-item">
 			    <div class="major-header">
 			        <div class="major-name">工商企业管理(创业管理方向)</div>
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-2-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-2-registered">0</div>
+			            <div class="stat-value" id="business-2-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-2-remaining">45</div>
+			            <div class="stat-value" id="business-2-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="business-2-progress"></div>
 			    </div>
-			    <button class="register-btn" id="business-2-btn" onclick="register('business', 2)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
@@ -526,22 +521,21 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-3-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-3-registered">0</div>
+			            <div class="stat-value" id="business-3-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-3-remaining">45</div>
+			            <div class="stat-value" id="business-3-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="business-3-progress"></div>
 			    </div>
-			    <button class="register-btn" id="business-3-btn" onclick="register('business', 3)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
@@ -550,22 +544,21 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-4-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-4-registered">0</div>
+			            <div class="stat-value" id="business-4-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-4-remaining">45</div>
+			            <div class="stat-value" id="business-4-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="business-4-progress"></div>
 			    </div>
-			    <button class="register-btn" id="business-4-btn" onclick="register('business', 4)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
@@ -574,22 +567,21 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-5-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-5-registered">0</div>
+			            <div class="stat-value" id="business-5-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-5-remaining">45</div>
+			            <div class="stat-value" id="business-5-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="business-5-progress"></div>
 			    </div>
-			    <button class="register-btn" id="business-5-btn" onclick="register('business', 5)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
@@ -598,46 +590,44 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-6-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-6-registered">0</div>
+			            <div class="stat-value" id="business-6-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-6-remaining">45</div>
+			            <div class="stat-value" id="business-6-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="business-6-progress"></div>
 			    </div>
-			    <button class="register-btn" id="business-6-btn" onclick="register('business', 6)">立即报名</button>
 			</div>
-			
+            
             <div class="major-item">
                 <div class="major-header">
                     <div class="major-name">市场营销</div>
                 </div>
                 <div class="stats">
                     <div class="stat-item">
-                        <div class="stat-value" id="business-7-total">45</div>
+                        <div class="stat-value">45</div>
                         <div>总名额</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="business-7-registered">0</div>
+                        <div class="stat-value" id="business-7-registered">35</div>
                         <div>已报名</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="business-7-remaining">45</div>
+                        <div class="stat-value" id="business-7-remaining">10</div>
                         <div>剩余名额</div>
                     </div>
                 </div>
                 <div class="progress-container">
                     <div class="progress-bar" id="business-7-progress"></div>
                 </div>
-                <button class="register-btn" id="business-7-btn" onclick="register('business', 7)">立即报名</button>
             </div>
 			
 			<div class="major-item">
@@ -646,22 +636,21 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-8-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-8-registered">0</div>
+			            <div class="stat-value" id="business-8-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-8-remaining">45</div>
+			            <div class="stat-value" id="business-8-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="business-8-progress"></div>
 			    </div>
-			    <button class="register-btn" id="business-8-btn" onclick="register('business', 8)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
@@ -670,22 +659,21 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-9-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-9-registered">0</div>
+			            <div class="stat-value" id="business-9-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-9-remaining">45</div>
+			            <div class="stat-value" id="business-9-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="business-9-progress"></div>
 			    </div>
-			    <button class="register-btn" id="business-9-btn" onclick="register('business', 9)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
@@ -694,30 +682,29 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-10-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-10-registered">0</div>
+			            <div class="stat-value" id="business-10-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="business-10-remaining">45</div>
+			            <div class="stat-value" id="business-10-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="business-10-progress"></div>
 			    </div>
-			    <button class="register-btn" id="business-10-btn" onclick="register('business', 10)">立即报名</button>
 			</div>
 			
         </div>
 
         <!-- 信息工程系专业列表 -->
-        <div id="information-majors" class="major-list">
+        <div id="information-majors" class="majors-list">
             <button class="back-btn" onclick="backToDepartments()">← 返回院系列表</button>
-            <h2 class="department-title">信息工程系</h2>
+            <h2 style="text-align: center; margin-bottom: 20px;">信息工程系</h2>
             
             <div class="major-item">
                 <div class="major-header">
@@ -725,198 +712,190 @@
                 </div>
                 <div class="stats">
                     <div class="stat-item">
-                        <div class="stat-value" id="information-1-total">45</div>
+                        <div class="stat-value">45</div>
                         <div>总名额</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="information-1-registered">0</div>
+                        <div class="stat-value" id="information-1-registered">35</div>
                         <div>已报名</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="information-1-remaining">45</div>
+                        <div class="stat-value" id="information-1-remaining">10</div>
                         <div>剩余名额</div>
                     </div>
                 </div>
                 <div class="progress-container">
                     <div class="progress-bar" id="information-1-progress"></div>
                 </div>
-                <button class="register-btn" id="information-1-btn" onclick="register('information', 1)">立即报名</button>
             </div>
 			
 			<div class="major-item">
 			    <div class="major-header">
-			        <div class="major-name">计算机网络应用(网络工程师)</div>
+			        <div class="major-name">计算机网络应用(网络工程师方向)</div>
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="information-2-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="information-2-registered">0</div>
+			            <div class="stat-value" id="information-2-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="information-2-remaining">45</div>
+			            <div class="stat-value" id="information-2-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="information-2-progress"></div>
 			    </div>
-			    <button class="register-btn" id="information-2-btn" onclick="register('information', 2)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
 			    <div class="major-header">
-			        <div class="major-name">计算机网络应用(移动互联网前端开发)</div>
+			        <div class="major-name">计算机网络应用(移动互联网前端开发方向)</div>
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="information-3-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="information-3-registered">0</div>
+			            <div class="stat-value" id="information-3-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="information-3-remaining">45</div>
+			            <div class="stat-value" id="information-3-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="information-3-progress"></div>
 			    </div>
-			    <button class="register-btn" id="information-3-btn" onclick="register('information', 3)">立即报名</button>
 			</div>
-		
-		    <div class="major-item">
-		        <div class="major-header">
-		            <div class="major-name">物联网应用技术(人工智能)</div>
-		        </div>
-		        <div class="stats">
-		            <div class="stat-item">
-		                <div class="stat-value" id="information-4-total">45</div>
-		                <div>总名额</div>
-		            </div>
-		            <div class="stat-item">
-		                <div class="stat-value" id="information-4-registered">0</div>
-		                <div>已报名</div>
-		            </div>
-		            <div class="stat-item">
-		                <div class="stat-value" id="information-4-remaining">45</div>
-		                <div>剩余名额</div>
-		            </div>
-		        </div>
-		        <div class="progress-container">
-		            <div class="progress-bar" id="information-4-progress"></div>
-		        </div>
-		        <button class="register-btn" id="information-4-btn" onclick="register('information', 4)">立即报名</button>
-		    </div>
+            
+            <div class="major-item">
+                <div class="major-header">
+                    <div class="major-name">物联网应用技术(人工智能方向)</div>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value">45</div>
+                        <div>总名额</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="information-4-registered">35</div>
+                        <div>已报名</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="information-4-remaining">10</div>
+                        <div>剩余名额</div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="information-4-progress"></div>
+                </div>
+            </div>
 			
 			<div class="major-item">
 			    <div class="major-header">
-			        <div class="major-name">物联网应用技术(5G通信应用)</div>
+			        <div class="major-name">物联网应用技术(5G通信应用方向)</div>
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="information-5-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="information-5-registered">0</div>
+			            <div class="stat-value" id="information-5-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="information-5-remaining">45</div>
+			            <div class="stat-value" id="information-5-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="information-5-progress"></div>
 			    </div>
-			    <button class="register-btn" id="information-5-btn" onclick="register('information', 5)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
 			    <div class="major-header">
-			        <div class="major-name">物联网应用技术(嵌入式开发)</div>
+			        <div class="major-name">物联网应用技术(嵌入式开发方向)</div>
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="information-6-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="information-6-registered">0</div>
+			            <div class="stat-value" id="information-6-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="information-6-remaining">45</div>
+			            <div class="stat-value" id="information-6-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="information-6-progress"></div>
 			    </div>
-			    <button class="register-btn" id="information-6-btn" onclick="register('information', 6)">立即报名</button>
 			</div>
+            
+            <div class="major-item">
+                <div class="major-header">
+                    <div class="major-name">大数据应用技术</div>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value">45</div>
+                        <div>总名额</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="information-7-registered">35</div>
+                        <div>已报名</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="information-7-remaining">10</div>
+                        <div>剩余名额</div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="information-7-progress"></div>
+                </div>
+            </div>
 			
 			<div class="major-item">
 			    <div class="major-header">
-			        <div class="major-name">大数据应用技术</div>
+			        <div class="major-name">大数据应用技术(云计算方向)</div>
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="information-7-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="information-7-registered">0</div>
+			            <div class="stat-value" id="information-8-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="information-7-remaining">45</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="information-7-progress"></div>
-			    </div>
-			    <button class="register-btn" id="information-7-btn" onclick="register('information', 7)">立即报名</button>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">大数据应用技术(云计算)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value" id="information-8-total">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="information-8-registered">0</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="information-8-remaining">45</div>
+			            <div class="stat-value" id="information-8-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="information-8-progress"></div>
 			    </div>
-			    <button class="register-btn" id="information-8-btn" onclick="register('information', 8)">立即报名</button>
 			</div>
 		
-    </div>
+        </div>
 
-		<!-- 经贸系专业列表 -->
-        <div id="economy-majors" class="major-list">
+        <!-- 经贸系专业列表 -->
+        <div id="economy-majors" class="majors-list">
             <button class="back-btn" onclick="backToDepartments()">← 返回院系列表</button>
-            <h2 class="department-title">经贸系</h2>
+            <h2 style="text-align: center; margin-bottom: 20px;">经贸系</h2>
             
             <div class="major-item">
                 <div class="major-header">
@@ -924,47 +903,45 @@
                 </div>
                 <div class="stats">
                     <div class="stat-item">
-                        <div class="stat-value" id="economy-1-total">45</div>
+                        <div class="stat-value">45</div>
                         <div>总名额</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="economy-1-registered">0</div>
+                        <div class="stat-value" id="economy-1-registered">35</div>
                         <div>已报名</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value" id="economy-1-remaining">45</div>
+                        <div class="stat-value" id="economy-1-remaining">10</div>
                         <div>剩余名额</div>
                     </div>
                 </div>
                 <div class="progress-container">
                     <div class="progress-bar" id="economy-1-progress"></div>
                 </div>
-                <button class="register-btn" id="economy-1-btn" onclick="register('economy', 1)">立即报名</button>
             </div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">会计(财务管理)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value" id="economy-2-total">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="economy-2-registered">0</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="economy-2-remaining">45</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="economy-2-progress"></div>
-			    </div>
-			    <button class="register-btn" id="economy-2-btn" onclick="register('economy', 2)">立即报名</button>
-			</div>
+            
+            <div class="major-item">
+                <div class="major-header">
+                    <div class="major-name">会计(财务管理方向)</div>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value">45</div>
+                        <div>总名额</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="economy-2-registered">35</div>
+                        <div>已报名</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="economy-2-remaining">10</div>
+                        <div>剩余名额</div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="economy-2-progress"></div>
+                </div>
+            </div>
 			
 			<div class="major-item">
 			    <div class="major-header">
@@ -972,46 +949,44 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-3-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-3-registered">0</div>
+			            <div class="stat-value" id="economy-3-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-3-remaining">45</div>
+			            <div class="stat-value" id="economy-3-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="economy-3-progress"></div>
 			    </div>
-			    <button class="register-btn" id="economy-3-btn" onclick="register('economy', 3)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
 			    <div class="major-header">
-			        <div class="major-name">金融管理与务实(投资与理财)</div>
+			        <div class="major-name">金融管理与务实(投资与理财方向)</div>
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-4-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-4-registered">0</div>
+			            <div class="stat-value" id="economy-4-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-4-remaining">45</div>
+			            <div class="stat-value" id="economy-4-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="economy-4-progress"></div>
 			    </div>
-			    <button class="register-btn" id="economy-4-btn" onclick="register('economy', 4)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
@@ -1020,22 +995,21 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-5-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-5-registered">0</div>
+			            <div class="stat-value" id="economy-5-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-5-remaining">45</div>
+			            <div class="stat-value" id="economy-5-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="economy-5-progress"></div>
 			    </div>
-			    <button class="register-btn" id="economy-5-btn" onclick="register('economy', 5)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
@@ -1044,198 +1018,190 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-6-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-6-registered">0</div>
+			            <div class="stat-value" id="economy-6-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-6-remaining">45</div>
+			            <div class="stat-value" id="economy-6-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="economy-6-progress"></div>
 			    </div>
-			    <button class="register-btn" id="economy-6-btn" onclick="register('economy', 6)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
 			    <div class="major-header">
-			        <div class="major-name">电子商务(跨境电商)</div>
+			        <div class="major-name">电子商务(跨境电商方向)</div>
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-7-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-7-registered">0</div>
+			            <div class="stat-value" id="economy-7-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-7-remaining">45</div>
+			            <div class="stat-value" id="economy-7-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="economy-7-progress"></div>
 			    </div>
-			    <button class="register-btn" id="economy-7-btn" onclick="register('economy', 7)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
 			    <div class="major-header">
-			        <div class="major-name">电子商务(新媒体运营)</div>
+			        <div class="major-name">电子商务(新媒体运营方向)</div>
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-8-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-8-registered">0</div>
+			            <div class="stat-value" id="economy-8-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-8-remaining">45</div>
+			            <div class="stat-value" id="economy-8-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="economy-8-progress"></div>
 			    </div>
-			    <button class="register-btn" id="economy-8-btn" onclick="register('economy', 8)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
 			    <div class="major-header">
-			        <div class="major-name">电子商务(新零售)</div>
+			        <div class="major-name">电子商务(新零售方向)</div>
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-9-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-9-registered">0</div>
+			            <div class="stat-value" id="economy-9-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-9-remaining">45</div>
+			            <div class="stat-value" id="economy-9-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="economy-9-progress"></div>
 			    </div>
-			    <button class="register-btn" id="economy-9-btn" onclick="register('economy', 9)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
 			    <div class="major-header">
-			        <div class="major-name">电子商务(电子竞技运动服务与管理)</div>
+			        <div class="major-name">电子商务(电子竞技运动服务与管理方向)</div>
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-10-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-10-registered">0</div>
+			            <div class="stat-value" id="economy-10-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="economy-10-remaining">45</div>
+			            <div class="stat-value" id="economy-10-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="economy-10-progress"></div>
 			    </div>
-			    <button class="register-btn" id="economy-10-btn" onclick="register('economy', 10)">立即报名</button>
 			</div>
 			
-		</div>
-    
-		<!-- 理工系专业列表 -->
-		<div id="science-majors" class="major-list">
-		    <button class="back-btn" onclick="backToDepartments()">← 返回院系列表</button>
-		    <h2 class="department-title">理工系</h2>
-		    
-		    <div class="major-item">
-		        <div class="major-header">
-		            <div class="major-name">工程造价</div>
-		        </div>
-		        <div class="stats">
-		            <div class="stat-item">
-		                <div class="stat-value" id="science-1-total">45</div>
-		                <div>总名额</div>
-		            </div>
-		            <div class="stat-item">
-		                <div class="stat-value" id="science-1-registered">0</div>
-		                <div>已报名</div>
-		            </div>
-		            <div class="stat-item">
-		                <div class="stat-value" id="science-1-remaining">45</div>
-		                <div>剩余名额</div>
-		            </div>
-		        </div>
-		        <div class="progress-container">
-		            <div class="progress-bar" id="science-1-progress"></div>
-		        </div>
-		        <button class="register-btn" id="science-1-btn" onclick="register('science', 1)">立即报名</button>
-		    </div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">工程造价(建筑工程管理)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-2-total">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-2-registered">0</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-2-remaining">45</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="science-2-progress"></div>
-			    </div>
-			    <button class="register-btn" id="science-2-btn" onclick="register('science', 2)">立即报名</button>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">工业机器人应用与维护</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-3-total">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-3-registered">0</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-3-remaining">45</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="science-3-progress"></div>
-			    </div>
-			    <button class="register-btn" id="science-3-btn" onclick="register('science', 3)">立即报名</button>
-			</div>
+        </div>
+
+        <!-- 理工系专业列表 -->
+        <div id="science-majors" class="majors-list">
+            <button class="back-btn" onclick="backToDepartments()">← 返回院系列表</button>
+            <h2 style="text-align: center; margin-bottom: 20px;">理工系</h2>
+            
+            <div class="major-item">
+                <div class="major-header">
+                    <div class="major-name">工程造价</div>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value">45</div>
+                        <div>总名额</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="science-1-registered">35</div>
+                        <div>已报名</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="science-1-remaining">10</div>
+                        <div>剩余名额</div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="science-1-progress"></div>
+                </div>
+            </div>
+            
+            <div class="major-item">
+                <div class="major-header">
+                    <div class="major-name">工程造价(建筑工程管理方向)</div>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value">45</div>
+                        <div>总名额</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="science-2-registered">35</div>
+                        <div>已报名</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="science-2-remaining">10</div>
+                        <div>剩余名额</div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="science-2-progress"></div>
+                </div>
+            </div>
+            
+            <div class="major-item">
+                <div class="major-header">
+                    <div class="major-name">工业机器人应用与维护</div>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value">45</div>
+                        <div>总名额</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="science-3-registered">35</div>
+                        <div>已报名</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="science-3-remaining">10</div>
+                        <div>剩余名额</div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="science-3-progress"></div>
+                </div>
+            </div>
 			
 			<div class="major-item">
 			    <div class="major-header">
@@ -1243,22 +1209,21 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-4-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-4-registered">0</div>
+			            <div class="stat-value" id="science-4-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-4-remaining">45</div>
+			            <div class="stat-value" id="science-4-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="science-4-progress"></div>
 			    </div>
-			    <button class="register-btn" id="science-4-btn" onclick="register('science', 4)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
@@ -1267,22 +1232,21 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-5-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-5-registered">0</div>
+			            <div class="stat-value" id="science-5-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-5-remaining">45</div>
+			            <div class="stat-value" id="science-5-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="science-5-progress"></div>
 			    </div>
-			    <button class="register-btn" id="science-5-btn" onclick="register('science', 5)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
@@ -1291,22 +1255,21 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-6-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-6-registered">0</div>
+			            <div class="stat-value" id="science-6-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-6-remaining">45</div>
+			            <div class="stat-value" id="science-6-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="science-6-progress"></div>
 			    </div>
-			    <button class="register-btn" id="science-6-btn" onclick="register('science', 6)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
@@ -1315,46 +1278,44 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-7-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-7-registered">0</div>
+			            <div class="stat-value" id="science-7-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-7-remaining">45</div>
+			            <div class="stat-value" id="science-7-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="science-7-progress"></div>
 			    </div>
-			    <button class="register-btn" id="science-7-btn" onclick="register('science', 7)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
 			    <div class="major-header">
-			        <div class="major-name">口腔义齿制造(数字化口腔技术)</div>
+			        <div class="major-name">口腔义齿制造(数字化口腔技术方向)</div>
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-8-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-8-registered">0</div>
+			            <div class="stat-value" id="science-8-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-8-remaining">45</div>
+			            <div class="stat-value" id="science-8-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="science-8-progress"></div>
 			    </div>
-			    <button class="register-btn" id="science-8-btn" onclick="register('science', 8)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
@@ -1363,22 +1324,21 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-9-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-9-registered">0</div>
+			            <div class="stat-value" id="science-9-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-9-remaining">45</div>
+			            <div class="stat-value" id="science-9-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="science-9-progress"></div>
 			    </div>
-			    <button class="register-btn" id="science-9-btn" onclick="register('science', 9)">立即报名</button>
 			</div>
 			
 			<div class="major-item">
@@ -1387,220 +1347,152 @@
 			    </div>
 			    <div class="stats">
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-10-total">45</div>
+			            <div class="stat-value">45</div>
 			            <div>总名额</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-10-registered">0</div>
+			            <div class="stat-value" id="science-10-registered">35</div>
 			            <div>已报名</div>
 			        </div>
 			        <div class="stat-item">
-			            <div class="stat-value" id="science-10-remaining">45</div>
+			            <div class="stat-value" id="science-10-remaining">10</div>
 			            <div>剩余名额</div>
 			        </div>
 			    </div>
 			    <div class="progress-container">
 			        <div class="progress-bar" id="science-10-progress"></div>
 			    </div>
-			    <button class="register-btn" id="science-10-btn" onclick="register('science', 10)">立即报名</button>
 			</div>
+			
+        </div>
 
+        <!-- 搜索结果模态框 -->
+        <div id="searchModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h3 id="searchResultTitle">查询结果</h3>
+                <p id="searchResultContent"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 专业数据
+        const majorsData = {
+            "计算机广告制作": { department: "艺术创作系", registered: 35, remaining: 10 },
+            "计算机广告制作(文化创意方向)": { department: "艺术创作系", registered: 35, remaining: 10 },
+			"计算机动画制作": { department: "艺术创作系", registered: 35, remaining: 10 },
+			"计算机动画制作(短视频制作技术方向)": { department: "艺术创作系", registered: 35, remaining: 10 },
+            "室内设计": { department: "艺术创作系", registered: 35, remaining: 10 },
+			"室内设计(唐明汉校企合作定向班)": { department: "艺术创作系", registered: 35, remaining: 10 },
+			"室内设计(智能家居方向)": { department: "艺术创作系", registered: 35, remaining: 10 },
+			"幼儿教育": { department: "艺术创作系", registered: 35, remaining: 10 },
+			"幼儿教育(国际双语方向)": { department: "艺术创作系", registered: 35, remaining: 10 },
+			"幼儿教育(音乐表演方向)": { department: "艺术创作系", registered: 35, remaining: 10 },
+			"播音与主持": { department: "艺术创作系", registered: 35, remaining: 10 },
+			"工商企业管理": { department: "工商管理系", registered: 35, remaining: 10 },
+			"工商企业管理(创业管理方向)": { department: "工商管理系", registered: 35, remaining: 10 },
+            "工商企业管理(国际经济与贸易方向)": { department: "工商管理系", registered: 35, remaining: 10 },
+			"工商企业管理(城际轨道管理方向)": { department: "工商管理系", registered: 35, remaining: 10 },
+			"工商企业管理(旅游酒店管理方向)": { department: "工商管理系", registered: 35, remaining: 10 },
+			"工商企业管理(人力资源管理方向)": { department: "工商管理系", registered: 35, remaining: 10 },
+			"市场营销": { department: "工商管理系", registered: 35, remaining: 10 },
+            "市场营销(大数据营销方向)": { department: "工商管理系", registered: 35, remaining: 10 },
+			"休闲体育服务": { department: "工商管理系", registered: 35, remaining: 10 },
+			"法律事务(警务方向)": { department: "工商管理系", registered: 35, remaining: 10 },
+			"计算机网络应用": { department: "信息工程系", registered: 35, remaining: 10 },
+            "计算机网络应用(网络工程师方向)": { department: "信息工程系", registered: 35, remaining: 10 },
+			"计算机网络应用(移动互联网前端开发方向)": { department: "信息工程系", registered: 35, remaining: 10 },
+			"物联网应用技术(人工智能方向)": { department: "信息工程系", registered: 35, remaining: 10 },
+            "物联网应用技术(5G通信应用方向)": { department: "信息工程系", registered: 35, remaining: 10 },
+			"物联网应用技术(嵌入式开发方向)": { department: "信息工程系", registered: 35, remaining: 10 },
+			"大数据应用技术": { department: "信息工程系", registered: 35, remaining: 10 },
+			"大数据应用技术(云计算方向)": { department: "信息工程系", registered: 35, remaining: 10 },
+            "会计": { department: "经贸系", registered: 35, remaining: 10 },
+            "会计(财务管理方向)": { department: "经贸系", registered: 35, remaining: 10 },
+			"金融管理与务实": { department: "经贸系", registered: 35, remaining: 10 },
+            "金融管理与务实(投资与理财方向)": { department: "经贸系", registered: 35, remaining: 10 },
+			"商务外语": { department: "经贸系", registered: 35, remaining: 10 },
+			"电子商务": { department: "经贸系", registered: 35, remaining: 10 },
+			"电子商务(跨境电商方向)": { department: "经贸系", registered: 35, remaining: 10 },
+			"电子商务(新媒体运营方向)": { department: "经贸系", registered: 35, remaining: 10 },
+			"电子商务(新零售方向)": { department: "经贸系", registered: 35, remaining: 10 },
+			"电子商务(电子竞技运动服务与管理方向)": { department: "经贸系", registered: 35, remaining: 10 },
+			"工程造价": { department: "理工系", registered: 35, remaining: 10 },
+			"工程造价(建筑工程管理方向)": { department: "理工系", registered: 35, remaining: 10 },
+			"工业机器人应用与维护": { department: "理工系", registered: 35, remaining: 10 },
+			"机电一体化": { department: "理工系", registered: 35, remaining: 10 },
+			"汽车检测与维修": { department: "理工系", registered: 35, remaining: 10 },
+            "新能源汽车检测与维修": { department: "理工系", registered: 35, remaining: 10 },
+			"无人机应用技术": { department: "理工系", registered: 35, remaining: 10 },
+			"口腔义齿制造(数字化口腔技术方向)": { department: "理工系", registered: 35, remaining: 10 },
+            "护理": { department: "理工系", registered: 35, remaining: 10 },
+			"中药营养保健": { department: "理工系", registered: 35, remaining: 10 },
+        };
+
+        // 显示特定院系的专业列表
+        function showMajors(department) {
+            document.getElementById('department-view').style.display = 'none';
+            document.getElementById(department + '-majors').style.display = 'block';
+        }
+
+        // 返回院系列表
+        function backToDepartments() {
+            document.getElementById('department-view').style.display = 'block';
+            document.querySelectorAll('.majors-list').forEach(el => {
+                el.style.display = 'none';
+            });
+        }
+
+        // 搜索专业
+        function searchMajor() {
+            const input = document.getElementById('searchInput').value.trim();
+            if (!input) {
+                alert('请输入专业名称');
+                return;
+            }
+
+            let found = false;
+            for (const [major, data] of Object.entries(majorsData)) {
+                if (major.includes(input)) {
+                    document.getElementById('searchResultTitle').textContent = major;
+                    document.getElementById('searchResultContent').innerHTML = `
+                        <p><strong>所属院系:</strong> ${data.department}</p>
+                        <p><strong>已报名人数:</strong> ${data.registered}</p>
+                        <p><strong>剩余名额:</strong> ${data.remaining}</p>
+                    `;
+                    document.getElementById('searchModal').style.display = 'block';
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                document.getElementById('searchResultTitle').textContent = '未找到';
+                document.getElementById('searchResultContent').textContent = '未找到匹配的专业，请检查输入是否正确';
+                document.getElementById('searchModal').style.display = 'block';
+            }
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            document.getElementById('searchModal').style.display = 'none';
+        }
+
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modal = document.getElementById('searchModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // 回车键搜索
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchMajor();
+            }
+        });
+    </script>
 </body>
-
-	<script>
-	    // 常量定义
-	    const MAX_CAPACITY = 45;
-	    
-	    // 初始化数据
-	    let registrationData = {
-	        art: Array(11).fill(0),      // 艺术创作系11个专业
-	        business: Array(10).fill(0), // 工商管理系10个专业
-	        information: Array(8).fill(0), // 信息工程系8个专业
-	        economy: Array(10).fill(0),  // 经贸系10个专业
-	        science: Array(10).fill(0)   // 理工系10个专业
-	    };
-	
-	    // 从本地存储加载数据
-	    function loadData() {
-	        const savedData = localStorage.getItem('registrationData');
-	        if (savedData) {
-	            try {
-	                registrationData = JSON.parse(savedData);
-	                // 确保数据结构完整
-	                registrationData.art = registrationData.art || Array(11).fill(0);
-	                registrationData.business = registrationData.business || Array(10).fill(0);
-	                registrationData.information = registrationData.information || Array(8).fill(0);
-	                registrationData.economy = registrationData.economy || Array(10).fill(0);
-	                registrationData.science = registrationData.science || Array(10).fill(0);
-	            } catch (e) {
-	                console.error("解析本地存储数据失败:", e);
-	            }
-	        }
-	    }
-	    
-	    // 保存数据到本地存储
-	    function saveData() {
-	        localStorage.setItem('registrationData', JSON.stringify(registrationData));
-	    }
-	
-	    // 显示特定院系的专业列表
-	    function showMajors(department) {
-	        document.getElementById('department-view').style.display = 'none';
-	        document.getElementById(department + '-majors').style.display = 'block';
-	        
-	        // 更新该院系所有专业的UI
-	        for (let i = 0; i < registrationData[department].length; i++) {
-	            updateMajorUI(department, i + 1);
-	        }
-	    }
-	
-	    // 返回院系列表
-	    function backToDepartments() {
-	        document.getElementById('department-view').style.display = 'block';
-	        document.querySelectorAll('.major-list').forEach(el => {
-	            el.style.display = 'none';
-	        });
-	    }
-	
-	    // 更新专业UI
-	    function updateMajorUI(department, index) {
-	        const prefix = department + '-' + index;
-	        const element = document.getElementById(prefix + '-registered');
-	        
-	        if (!element) {
-	            console.warn(`元素 ${prefix}-registered 未找到`);
-	            return;
-	        }
-	        
-	        const registered = registrationData[department][index - 1] || 0;
-	        const remaining = MAX_CAPACITY - registered;
-	        const percentage = (registered / MAX_CAPACITY) * 100;
-	        
-	        document.getElementById(prefix + '-registered').textContent = registered;
-	        document.getElementById(prefix + '-remaining').textContent = remaining;
-	        document.getElementById(prefix + '-progress').style.width = percentage + '%';
-	        
-	        const btn = document.getElementById(prefix + '-btn');
-	        if (btn) {
-	            btn.disabled = registered >= MAX_CAPACITY;
-	            
-	            if (registered >= MAX_CAPACITY) {
-	                document.getElementById(prefix + '-progress').classList.add('danger');
-	            } else {
-	                document.getElementById(prefix + '-progress').classList.remove('danger');
-	            }
-	        }
-	    }
-	
-	    // // 报名函数
-	    // function register(department, index) {
-	    //     if (!registrationData[department]) {
-	    //         console.error(`无效的院系: ${department}`);
-	    //         return;
-	    //     }
-	        
-	    //     if (index - 1 >= registrationData[department].length) {
-	    //         console.error(`无效的专业索引: ${index}`);
-	    //         return;
-	    //     }
-	        
-	    //     if (registrationData[department][index - 1] < MAX_CAPACITY) {
-	    //         registrationData[department][index - 1]++;
-	    //         saveData();
-	    //         updateMajorUI(department, index);
-	            
-	    //         // 获取专业名称
-	    //         const btnElement = document.getElementById(`${department}-${index}-btn`);
-	    //         if (btnElement) {
-	    //             const majorName = btnElement.parentNode.querySelector('.major-name').textContent;
-	    //             alert(`报名成功！\n${getDepartmentName(department)} - ${majorName}`);
-	    //         }
-	    //     }
-	    // }
-		
-		// 报名函数
-		function register(department, index) {
-		    if (!registrationData[department]) {
-		        console.error(`无效的院系: ${department}`);
-		        return;
-		    }
-		    
-		    if (index - 1 >= registrationData[department].length) {
-		        console.error(`无效的专业索引: ${index}`);
-		        return;
-		    }
-		    
-		    if (registrationData[department][index - 1] < MAX_CAPACITY) {
-		        // 获取专业名称
-		        const btnElement = document.getElementById(`${department}-${index}-btn`);
-		        if (btnElement) {
-		            const majorName = btnElement.parentNode.querySelector('.major-name').textContent;
-		            const departmentName = getDepartmentName(department);
-		            
-		            // 创建自定义确认对话框
-		            const confirmation = confirm(`确定要报名以下专业吗？\n\n${departmentName} - ${majorName}\n\n点击"确定"报名，点击"取消"不报名`);
-		            
-		            if (confirmation) {
-		                // 用户点击了确定
-		                registrationData[department][index - 1]++;
-		                saveData();
-		                updateMajorUI(department, index);
-		                alert(`报名成功！\n${departmentName} - ${majorName}`);
-		            } else {
-		                // 用户点击了取消
-		                console.log(`用户取消了 ${departmentName} - ${majorName} 的报名`);
-		            }
-		        }
-		    }
-		}
-	
-	    // 获取院系名称
-	    function getDepartmentName(department) {
-	        const names = {
-	            'art': '艺术创作系',
-	            'business': '工商管理系',
-	            'information': '信息工程系',
-	            'economy': '经贸系',
-	            'science': '理工系'
-	        };
-	        return names[department] || department;
-	    }
-	
-	    // 页面加载时初始化
-	    window.onload = function() {
-	        loadData();
-	        // 默认显示院系列表
-	        backToDepartments();
-	        
-	        // 初始化所有专业的UI
-	        for (const dept in registrationData) {
-	            for (let i = 0; i < registrationData[dept].length; i++) {
-	                updateMajorUI(dept, i + 1);
-	            }
-	        }
-	    };
-		
-		//重置数据
-		function resetAllData() {
-		    if (confirm('确定要重置所有报名数据吗？')) {
-		        registrationData = {
-		            art: Array(11).fill(0),
-		            business: Array(10).fill(0),
-		            information: Array(8).fill(0),
-		            economy: Array(10).fill(0),
-		            science: Array(10).fill(0)
-		        };
-		        saveData();
-		        
-		        // 更新所有UI
-		        for (const dept in registrationData) {
-		            for (let i = 0; i < registrationData[dept].length; i++) {
-		                updateMajorUI(dept, i + 1);
-		            }
-		        }
-		    }
-		}
-		
-	</script>
-
 </html>
