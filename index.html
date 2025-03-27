@@ -25,14 +25,19 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
             padding: 30px;
         }
+		.container img {
+			padding-top: 20px;
+			padding-bottom: 10px;
+			width: 20%;
+		}
         header {
             text-align: center;
             margin-bottom: 30px;
             padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
+			background-color: #094488;
         }
         h1 {
-            color: #2c3e50;
+            color: white;
             margin-bottom: 15px;
         }
         .search-box {
@@ -48,12 +53,13 @@
         }
         .search-box button {
             padding: 10px 20px;
-            background-color: #3498db;
+            background-color: #094488;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             margin-left: 10px;
+			width: 60%;
         }
         .departments {
             display: grid;
@@ -170,1202 +176,17 @@
 <body>
     <div class="container">
         <header>
-            <h1>工商学院专业报名</h1>
-			<h1>统计系统</h1>
-            <p style="color: crimson;">仅供内部使用查看</p>
+			<img src="img/logo.png"/>
+            <h1>广州工商学院专业剩余名额统计系统</h1>
         </header>
 
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="输入专业名称查询报名情况">
-            <button onclick="searchMajor()">查询</button>
+            <input type="text" id="searchInput" placeholder="输入专业名称查询剩余名额情况">
         </div>
-
-        <div id="department-view">
-            <div class="departments">
-                <div class="department-card" onclick="showMajors('art')">
-                    <h2>艺术创作系</h2>
-                    <p>点击查看专业</p>
-                </div>
-                <div class="department-card" onclick="showMajors('business')">
-                    <h2>工商管理系</h2>
-                    <p>点击查看专业</p>
-                </div>
-                <div class="department-card" onclick="showMajors('information')">
-                    <h2>信息工程系</h2>
-                    <p>点击查看专业</p>
-                </div>
-                <div class="department-card" onclick="showMajors('economy')">
-                    <h2>经贸系</h2>
-                    <p>点击查看专业</p>
-                </div>
-                <div class="department-card" onclick="showMajors('science')">
-                    <h2>理工系</h2>
-                    <p>点击查看专业</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- 艺术创作系专业列表 -->
-        <div id="art-majors" class="majors-list">
-            <button class="back-btn" onclick="backToDepartments()">← 返回院系列表</button>
-            <h2 style="text-align: center; margin-bottom: 20px;">艺术创作系</h2>
-            
-            <div class="major-item">
-                <div class="major-header">
-                    <div class="major-name">计算机广告制作</div>
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value">45</div>
-                        <div>总名额</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="art-1-registered">35</div>
-                        <div>已报名</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="art-1-remaining">10</div>
-                        <div>剩余名额</div>
-                    </div>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="art-1-progress"></div>
-                </div>
-            </div>
-            
-            <div class="major-item">
-                <div class="major-header">
-                    <div class="major-name">计算机广告制作(文化创意方向)</div>
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value">45</div>
-                        <div>总名额</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="art-2-registered">35</div>
-                        <div>已报名</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="art-2-remaining">10</div>
-                        <div>剩余名额</div>
-                    </div>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="art-2-progress"></div>
-                </div>
-            </div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">计算机动画制作</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="art-3-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="art-3-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="art-3-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">计算机动画制作(短视频制作技术方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="art-4-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="art-4-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="art-4-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">室内设计</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="art-5-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="art-5-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="art-5-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">室内设计(唐明汉校企合作定向班)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="art-6-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="art-6-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="art-6-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">室内设计(智能家居方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="art-7-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="art-7-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="art-7-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">幼儿教育</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="art-8-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="art-8-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="art-8-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">幼儿教育(国际双语方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="art-9-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="art-9-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="art-9-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">幼儿教育(音乐表演方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="art-10-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="art-10-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="art-10-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">播音与主持</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="art-11-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="art-11-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="art-11-progress"></div>
-			    </div>
-			</div>
-			
-        </div>
-
-        <!-- 工商管理系专业列表 -->
-        <div id="business-majors" class="majors-list">
-            <button class="back-btn" onclick="backToDepartments()">← 返回院系列表</button>
-            <h2 style="text-align: center; margin-bottom: 20px;">工商管理系</h2>
-            
-            <div class="major-item">
-                <div class="major-header">
-                    <div class="major-name">工商企业管理</div>
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value">45</div>
-                        <div>总名额</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="business-1-registered">35</div>
-                        <div>已报名</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="business-1-remaining">10</div>
-                        <div>剩余名额</div>
-                    </div>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="business-1-progress"></div>
-                </div>
-            </div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">工商企业管理(创业管理方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="business-2-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="business-2-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="business-2-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">工商企业管理(国际经济与贸易方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="business-3-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="business-3-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="business-3-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">工商企业管理(城际轨道管理方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="business-4-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="business-4-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="business-4-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">工商企业管理(旅游酒店管理方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="business-5-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="business-5-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="business-5-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">工商企业管理(人力资源管理方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="business-6-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="business-6-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="business-6-progress"></div>
-			    </div>
-			</div>
-            
-            <div class="major-item">
-                <div class="major-header">
-                    <div class="major-name">市场营销</div>
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value">45</div>
-                        <div>总名额</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="business-7-registered">35</div>
-                        <div>已报名</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="business-7-remaining">10</div>
-                        <div>剩余名额</div>
-                    </div>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="business-7-progress"></div>
-                </div>
-            </div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">市场营销(大数据营销方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="business-8-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="business-8-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="business-8-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">休闲体育服务</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="business-9-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="business-9-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="business-9-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">法律事务(警务方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="business-10-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="business-10-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="business-10-progress"></div>
-			    </div>
-			</div>
-			
-        </div>
-
-        <!-- 信息工程系专业列表 -->
-        <div id="information-majors" class="majors-list">
-            <button class="back-btn" onclick="backToDepartments()">← 返回院系列表</button>
-            <h2 style="text-align: center; margin-bottom: 20px;">信息工程系</h2>
-            
-            <div class="major-item">
-                <div class="major-header">
-                    <div class="major-name">计算机网络应用</div>
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value">45</div>
-                        <div>总名额</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="information-1-registered">35</div>
-                        <div>已报名</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="information-1-remaining">10</div>
-                        <div>剩余名额</div>
-                    </div>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="information-1-progress"></div>
-                </div>
-            </div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">计算机网络应用(网络工程师方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="information-2-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="information-2-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="information-2-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">计算机网络应用(移动互联网前端开发方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="information-3-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="information-3-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="information-3-progress"></div>
-			    </div>
-			</div>
-            
-            <div class="major-item">
-                <div class="major-header">
-                    <div class="major-name">物联网应用技术(人工智能方向)</div>
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value">45</div>
-                        <div>总名额</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="information-4-registered">35</div>
-                        <div>已报名</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="information-4-remaining">10</div>
-                        <div>剩余名额</div>
-                    </div>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="information-4-progress"></div>
-                </div>
-            </div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">物联网应用技术(5G通信应用方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="information-5-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="information-5-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="information-5-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">物联网应用技术(嵌入式开发方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="information-6-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="information-6-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="information-6-progress"></div>
-			    </div>
-			</div>
-            
-            <div class="major-item">
-                <div class="major-header">
-                    <div class="major-name">大数据应用技术</div>
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value">45</div>
-                        <div>总名额</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="information-7-registered">35</div>
-                        <div>已报名</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="information-7-remaining">10</div>
-                        <div>剩余名额</div>
-                    </div>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="information-7-progress"></div>
-                </div>
-            </div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">大数据应用技术(云计算方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="information-8-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="information-8-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="information-8-progress"></div>
-			    </div>
-			</div>
 		
-        </div>
-
-        <!-- 经贸系专业列表 -->
-        <div id="economy-majors" class="majors-list">
-            <button class="back-btn" onclick="backToDepartments()">← 返回院系列表</button>
-            <h2 style="text-align: center; margin-bottom: 20px;">经贸系</h2>
-            
-            <div class="major-item">
-                <div class="major-header">
-                    <div class="major-name">会计</div>
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value">45</div>
-                        <div>总名额</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="economy-1-registered">35</div>
-                        <div>已报名</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="economy-1-remaining">10</div>
-                        <div>剩余名额</div>
-                    </div>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="economy-1-progress"></div>
-                </div>
-            </div>
-            
-            <div class="major-item">
-                <div class="major-header">
-                    <div class="major-name">会计(财务管理方向)</div>
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value">45</div>
-                        <div>总名额</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="economy-2-registered">35</div>
-                        <div>已报名</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="economy-2-remaining">10</div>
-                        <div>剩余名额</div>
-                    </div>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="economy-2-progress"></div>
-                </div>
-            </div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">金融管理与务实</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="economy-3-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="economy-3-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="economy-3-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">金融管理与务实(投资与理财方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="economy-4-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="economy-4-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="economy-4-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">商务外语</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="economy-5-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="economy-5-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="economy-5-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">电子商务</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="economy-6-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="economy-6-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="economy-6-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">电子商务(跨境电商方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="economy-7-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="economy-7-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="economy-7-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">电子商务(新媒体运营方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="economy-8-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="economy-8-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="economy-8-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">电子商务(新零售方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="economy-9-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="economy-9-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="economy-9-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">电子商务(电子竞技运动服务与管理方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="economy-10-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="economy-10-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="economy-10-progress"></div>
-			    </div>
-			</div>
-			
-        </div>
-
-        <!-- 理工系专业列表 -->
-        <div id="science-majors" class="majors-list">
-            <button class="back-btn" onclick="backToDepartments()">← 返回院系列表</button>
-            <h2 style="text-align: center; margin-bottom: 20px;">理工系</h2>
-            
-            <div class="major-item">
-                <div class="major-header">
-                    <div class="major-name">工程造价</div>
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value">45</div>
-                        <div>总名额</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="science-1-registered">35</div>
-                        <div>已报名</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="science-1-remaining">10</div>
-                        <div>剩余名额</div>
-                    </div>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="science-1-progress"></div>
-                </div>
-            </div>
-            
-            <div class="major-item">
-                <div class="major-header">
-                    <div class="major-name">工程造价(建筑工程管理方向)</div>
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value">45</div>
-                        <div>总名额</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="science-2-registered">35</div>
-                        <div>已报名</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="science-2-remaining">10</div>
-                        <div>剩余名额</div>
-                    </div>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="science-2-progress"></div>
-                </div>
-            </div>
-            
-            <div class="major-item">
-                <div class="major-header">
-                    <div class="major-name">工业机器人应用与维护</div>
-                </div>
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value">45</div>
-                        <div>总名额</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="science-3-registered">35</div>
-                        <div>已报名</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="science-3-remaining">10</div>
-                        <div>剩余名额</div>
-                    </div>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="science-3-progress"></div>
-                </div>
-            </div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">机电一体化</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-4-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-4-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="science-4-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">汽车检测与维修</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-5-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-5-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="science-5-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">新能源汽车检测与维修</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-6-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-6-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="science-6-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">无人机应用技术</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-7-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-7-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="science-7-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">口腔义齿制造(数字化口腔技术方向)</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-8-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-8-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="science-8-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">护理</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-9-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-9-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="science-9-progress"></div>
-			    </div>
-			</div>
-			
-			<div class="major-item">
-			    <div class="major-header">
-			        <div class="major-name">中药营养保健</div>
-			    </div>
-			    <div class="stats">
-			        <div class="stat-item">
-			            <div class="stat-value">45</div>
-			            <div>总名额</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-10-registered">35</div>
-			            <div>已报名</div>
-			        </div>
-			        <div class="stat-item">
-			            <div class="stat-value" id="science-10-remaining">10</div>
-			            <div>剩余名额</div>
-			        </div>
-			    </div>
-			    <div class="progress-container">
-			        <div class="progress-bar" id="science-10-progress"></div>
-			    </div>
-			</div>
-			
-        </div>
+		<div class="search-box">
+		    <button onclick="searchMajor()">查询</button>
+		</div>
 
         <!-- 搜索结果模态框 -->
         <div id="searchModal" class="modal">
@@ -1375,46 +196,72 @@
                 <p id="searchResultContent"></p>
             </div>
         </div>
+		
+		<div style="text-align: center;">
+			<p style="color: crimson;">注：招生专业剩余名额查询结果仅供参考，实际数据以学校最终统计为主</p>
+			<p>最终解释权归广州工商学院所有</p>
+		</div>
+		
+		
     </div>
 
     <script>
         // 专业数据
         const majorsData = {
             "计算机广告制作": { department: "艺术创作系", registered: 35, remaining: 10 },
-            "计算机广告制作(文化创意方向)": { department: "艺术创作系", registered: 35, remaining: 10 },
+			"计算机广告制作(视觉传达设计专本直通)": { department: "艺术创作系", registered: 35, remaining: 10 },
+			"计算机广告制作(升学特色班)": { department: "艺术创作系", registered: 35, remaining: 10 },
+			"计算机广告制作(文化创意方向)": { department: "艺术创作系", registered: 35, remaining: 10 },
 			"计算机动画制作": { department: "艺术创作系", registered: 35, remaining: 10 },
 			"计算机动画制作(短视频制作技术方向)": { department: "艺术创作系", registered: 35, remaining: 10 },
             "室内设计": { department: "艺术创作系", registered: 35, remaining: 10 },
+			"室内设计(预备技师专本直通)": { department: "艺术创作系", registered: 35, remaining: 10 },
+			"室内设计(升学特色班)": { department: "艺术创作系", registered: 35, remaining: 10 },
 			"室内设计(唐明汉校企合作定向班)": { department: "艺术创作系", registered: 35, remaining: 10 },
 			"室内设计(智能家居方向)": { department: "艺术创作系", registered: 35, remaining: 10 },
 			"幼儿教育": { department: "艺术创作系", registered: 35, remaining: 10 },
+			"幼儿教育(专本直通)": { department: "艺术创作系", registered: 35, remaining: 10 },
 			"幼儿教育(国际双语方向)": { department: "艺术创作系", registered: 35, remaining: 10 },
 			"幼儿教育(音乐表演方向)": { department: "艺术创作系", registered: 35, remaining: 10 },
 			"播音与主持": { department: "艺术创作系", registered: 35, remaining: 10 },
 			"工商企业管理": { department: "工商管理系", registered: 35, remaining: 10 },
+			"工商企业管理(专本直通)": { department: "工商管理系", registered: 35, remaining: 10 },
+			"工商企业管理(升学特色班)": { department: "工商管理系", registered: 35, remaining: 10 },
 			"工商企业管理(创业管理方向)": { department: "工商管理系", registered: 35, remaining: 10 },
             "工商企业管理(国际经济与贸易方向)": { department: "工商管理系", registered: 35, remaining: 10 },
 			"工商企业管理(城际轨道管理方向)": { department: "工商管理系", registered: 35, remaining: 10 },
 			"工商企业管理(旅游酒店管理方向)": { department: "工商管理系", registered: 35, remaining: 10 },
-			"工商企业管理(人力资源管理方向)": { department: "工商管理系", registered: 35, remaining: 10 },
+			"工商企业管理(人力资源管理专本直通)": { department: "工商管理系", registered: 35, remaining: 10 },
 			"市场营销": { department: "工商管理系", registered: 35, remaining: 10 },
+			"市场营销(升学特色班)": { department: "工商管理系", registered: 35, remaining: 10 },
             "市场营销(大数据营销方向)": { department: "工商管理系", registered: 35, remaining: 10 },
 			"休闲体育服务": { department: "工商管理系", registered: 35, remaining: 10 },
 			"法律事务(警务方向)": { department: "工商管理系", registered: 35, remaining: 10 },
 			"计算机网络应用": { department: "信息工程系", registered: 35, remaining: 10 },
+			"计算机网络应用(升学特色班)": { department: "信息工程系", registered: 35, remaining: 10 },
+			"计算机网络应用(中国高科集团合作班)": { department: "信息工程系", registered: 35, remaining: 10 },
             "计算机网络应用(网络工程师方向)": { department: "信息工程系", registered: 35, remaining: 10 },
 			"计算机网络应用(移动互联网前端开发方向)": { department: "信息工程系", registered: 35, remaining: 10 },
+			"物联网应用技术(中国高科集团合作班)": { department: "信息工程系", registered: 35, remaining: 10 },
 			"物联网应用技术(人工智能方向)": { department: "信息工程系", registered: 35, remaining: 10 },
             "物联网应用技术(5G通信应用方向)": { department: "信息工程系", registered: 35, remaining: 10 },
 			"物联网应用技术(嵌入式开发方向)": { department: "信息工程系", registered: 35, remaining: 10 },
 			"大数据应用技术": { department: "信息工程系", registered: 35, remaining: 10 },
+			"大数据应用技术(中国高科集团合作班)": { department: "信息工程系", registered: 35, remaining: 10 },
 			"大数据应用技术(云计算方向)": { department: "信息工程系", registered: 35, remaining: 10 },
             "会计": { department: "经贸系", registered: 35, remaining: 10 },
+			"会计(升学特色班)": { department: "经贸系", registered: 35, remaining: 10 },
             "会计(财务管理方向)": { department: "经贸系", registered: 35, remaining: 10 },
 			"金融管理与务实": { department: "经贸系", registered: 35, remaining: 10 },
+			"金融管理与务实(专本直通)": { department: "经贸系", registered: 35, remaining: 10 },
             "金融管理与务实(投资与理财方向)": { department: "经贸系", registered: 35, remaining: 10 },
 			"商务外语": { department: "经贸系", registered: 35, remaining: 10 },
+			"商务外语(专本直通)": { department: "经贸系", registered: 35, remaining: 10 },
+			"商务外语(升学特色班)": { department: "经贸系", registered: 35, remaining: 10 },
 			"电子商务": { department: "经贸系", registered: 35, remaining: 10 },
+			"电子商务(预备技师专本直通)": { department: "经贸系", registered: 35, remaining: 10 },
+			"电子商务(升学特色班)": { department: "经贸系", registered: 35, remaining: 10 },
+			"电子商务(中国高科集团合作班)": { department: "经贸系", registered: 35, remaining: 10 },
 			"电子商务(跨境电商方向)": { department: "经贸系", registered: 35, remaining: 10 },
 			"电子商务(新媒体运营方向)": { department: "经贸系", registered: 35, remaining: 10 },
 			"电子商务(新零售方向)": { department: "经贸系", registered: 35, remaining: 10 },
@@ -1452,24 +299,38 @@
                 alert('请输入专业名称');
                 return;
             }
-
-            let found = false;
+        
+            let foundMajors = [];
             for (const [major, data] of Object.entries(majorsData)) {
                 if (major.includes(input)) {
-                    document.getElementById('searchResultTitle').textContent = major;
-                    document.getElementById('searchResultContent').innerHTML = `
-                        <p><strong>所属院系:</strong> ${data.department}</p>
-                        <p><strong>已报名人数:</strong> ${data.registered}</p>
-                        <p><strong>剩余名额:</strong> ${data.remaining}</p>
-                    `;
-                    document.getElementById('searchModal').style.display = 'block';
-                    found = true;
-                    break;
+                    foundMajors.push({major, data});
                 }
             }
-
-            if (!found) {
-                document.getElementById('searchResultTitle').textContent = '未找到';
+        
+            if (foundMajors.length > 0) {
+                document.getElementById('searchResultTitle').innerHTML = 
+                    `<div style="margin-top: 30px;">专业剩余名额查询结果如下:</br><span style="color: red;">共找到${foundMajors.length}个相关专业</span>`;
+                
+                let resultHTML = `
+                    <div style="margin-top: 25px;">
+                `;
+                
+                foundMajors.forEach(item => {
+                    resultHTML += `
+                        <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                            <p><strong>专业名称：${item.major}</strong></p>
+                            <p><strong>剩余名额：${item.data.remaining}个</strong></p>
+                        </div>
+                    `;
+                });
+                
+                resultHTML += `</div>`;
+                
+                document.getElementById('searchResultContent').innerHTML = resultHTML;
+                document.getElementById('searchModal').style.display = 'block';
+            } else {
+                document.getElementById('searchResultTitle').innerHTML = 
+                    `<span style="color: red;">未找到</span>`;
                 document.getElementById('searchResultContent').textContent = '未找到匹配的专业，请检查输入是否正确';
                 document.getElementById('searchModal').style.display = 'block';
             }
